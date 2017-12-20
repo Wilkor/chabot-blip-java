@@ -53,6 +53,8 @@ public class MessageController {
 				LOGGER.error("Request not accepted");
 			}
 
+			LOGGER.info("Message from user " + from.toString());
+			
 			Envelope to = new Envelope();
 			to.setTo(from.getFrom());
 			to.setFrom(from.getTo());
@@ -65,13 +67,11 @@ public class MessageController {
 			messageRepository.save(new Message(to.toString()));
 			
 			
-			System.out.println("Sender " + status);
-			
 			if (status != HttpStatus.ACCEPTED ) {
 				LOGGER.error("Request not accepted");
 			}
 
-			
+			LOGGER.info("Message from bot " + to.toString());
 			
 		} catch (Exception e) {
 			LOGGER.error("Error on get messages", e);
