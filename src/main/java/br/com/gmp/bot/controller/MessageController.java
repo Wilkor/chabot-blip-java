@@ -61,6 +61,9 @@ public class MessageController {
 			to.setType(from.getType());
 			
 			status = serviceHttp.post(to);
+
+			messageRepository.save(new Message(to.toString()));
+			
 			
 			System.out.println("Sender " + status);
 			
