@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Message {
+public class Envelope {
 	
 	private String id;
 	

@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.gmp.bot.model.Message;
+import br.com.gmp.bot.model.Envelope;
 
 @Service
 public class ServiceHttp {
@@ -23,14 +23,14 @@ public class ServiceHttp {
 		this.restTemplate = restTemplate;
 	}
 
-	public HttpStatus post(Message envelope) {
+	public HttpStatus post(Envelope envelope) {
 		
 		HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "");
 
-        HttpEntity<Message> entity = new HttpEntity<Message>(envelope, headers);
+        HttpEntity<Envelope> entity = new HttpEntity<Envelope>(envelope, headers);
 
         ResponseEntity<Object> response = restTemplate
         										.postForEntity("https://msging.net/messages", entity, Object.class);
