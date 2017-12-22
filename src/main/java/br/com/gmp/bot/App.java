@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableAsync
 @SpringBootApplication
 @Configuration
+@EnableConfigurationProperties
 public class App 
 {
     public static void main( String[] args )
@@ -28,8 +30,8 @@ public class App
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
         dataSource.setUrl("jdbc:mariadb://localhost:3306/poc");
-        dataSource.setUsername("xxx");
-        dataSource.setPassword("xxx");
+        dataSource.setUsername("root");
+        dataSource.setPassword("root");
         return dataSource;
     }
     
