@@ -1,9 +1,9 @@
 package br.com.gmp.bot.controller;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 
+import org.limeprotocol.messaging.contents.PlainText;
+import org.limeprotocol.serialization.JacksonEnvelopeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gmp.bot.entity.Message;
-import br.com.gmp.bot.model.Envelope;
 import br.com.gmp.bot.repository.MessageRepository;
 import br.com.gmp.bot.service.ServiceHttp;
 import br.com.gmp.bot.service.ServiceMapper;
@@ -42,36 +41,29 @@ public class MessageController {
 
 		try {
 
-			Envelope from = serviceMapper.get().readValue(envelope, Envelope.class);
-			
-			HttpStatus status = serviceHttp.post(from);
-			
+			org.limeprotocol.Message msg = (org.limeprotocol.Message) new JacksonEnvelopeSerializer().deserialize(envelope);
 			
 			messageRepository.save(new Message(envelope));
+
+			LOGGER.info("Message from user " + msg.toString());
+			
+			org.limeprotocol.Message limeMsg = new org.limeprotocol.Message();
+			
+			limeMsg.setContent(msg.getContent());
+			limeMsg.setTo(msg.getFrom());
+			limeMsg.setFrom(msg.getTo());
+			limeMsg.setId(org.limeprotocol.EnvelopeId.newId());
+		
+			HttpStatus status = serviceHttp.post(limeMsg);
+
+			messageRepository.save(new Message(limeMsg.toString()));
+			
 			
 			if (status != HttpStatus.ACCEPTED ) {
 				LOGGER.error("Request not accepted");
 			}
 
-			LOGGER.info("Message from user " + from.toString());
-			
-			Envelope to = new Envelope();
-			to.setTo(from.getFrom());
-			to.setFrom(from.getTo());
-			to.setId(UUID.randomUUID().toString());
-			to.setContent(from.getContent());
-			to.setType(from.getType());
-			
-			status = serviceHttp.post(to);
-
-			messageRepository.save(new Message(to.toString()));
-			
-			
-			if (status != HttpStatus.ACCEPTED ) {
-				LOGGER.error("Request not accepted");
-			}
-
-			LOGGER.info("Message from bot " + to.toString());
+			LOGGER.info("Message from bot " + limeMsg.toString());
 			
 		} catch (Exception e) {
 			LOGGER.error("Error on get messages", e);
