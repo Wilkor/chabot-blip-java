@@ -35,7 +35,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.spri/ngframework.boot</groupId>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>1.5.9.RELEASE</version>
 		</dependency>
